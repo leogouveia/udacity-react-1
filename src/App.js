@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
+import Header from './Header/Header';
+import Users from './Users';
+import AddUser from './AddUser';
+
 import './App.css';
 
 /*
@@ -11,13 +15,24 @@ The instructions for this project are located in the `instructions.md` file.
 */
 
 class App extends Component {
+  state = {
+    users: []
+  }
+  onUserAdd = (user) => {
+    this.setState({error: ''});
+    if (this.userExists(user)) return false;
+    this.setState(preState => preState.users.push(user));
+    return true;
+  }
+
+  userExists = (user) => this.state.users.filter(u => u.username === user.username).length > 0;
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">ReactND - Coding Practice</h1>
-        </header>
+        <Header />
+        <AddUser onUserAdd={this.onUserAdd} />
+        <Users users={this.state.users} />
       </div>
     );
   }
